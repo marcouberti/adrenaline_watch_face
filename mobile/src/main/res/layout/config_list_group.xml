@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/list_default_padding"
+    android:paddingRight="@dimen/list_default_padding"
+    android:paddingTop="18dp"
+    android:paddingBottom="18dp"
+    android:background="@color/group_bg_color">
+    <TextView
+        android:id="@+id/name"
+        android:layout_toRightOf="@+id/gradient"
+        android:layout_centerVertical="true"
+        android:textColor="@color/color_item_label_color"
+        android:fontFamily="sans-serif-light"
+        android:textSize="18dp"
+        android:text="GROUP NAME"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

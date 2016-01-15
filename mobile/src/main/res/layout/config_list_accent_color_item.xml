@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/list_default_padding"
+    android:background="?attr/selectableItemBackground">
+    <com.marcouberti.sonicboomwatchface.CustomGradientView
+        android:id="@+id/gradient"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        app:circle_radius="26dp"
+        app:circle_border_width="0dp"
+        android:layout_width="52dp"
+        android:layout_height="53dp" />
+    <TextView
+        android:id="@+id/name"
+        android:layout_marginLeft="@dimen/list_default_padding"
+        android:layout_toRightOf="@+id/gradient"
+        android:layout_centerVertical="true"
+        android:textColor="@color/color_item_label_color"
+        android:fontFamily="sans-serif-light"
+        android:textSize="18dp"
+        android:text="Gradient name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

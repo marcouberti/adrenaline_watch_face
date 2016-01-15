@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:fitsSystemWindows="true">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:contentScrim="?attr/colorPrimary"
+                app:expandedTitleMarginStart="48dp"
+                app:expandedTitleMarginEnd="64dp"
+                android:fitsSystemWindows="true">
+                <RelativeLayout
+                    app:layout_collapseMode="parallax"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="#424242">
+                    <com.marcouberti.sonicboomwatchface.CustomGradientView
+                        android:id="@+id/gradient"
+                        android:layout_centerInParent="true"
+                        app:circle_radius="1110dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/blank_watch"/>
+                </RelativeLayout>
+
+                <!-- TOOLBAR -->
+                <android.support.v7.widget.Toolbar
+                    app:layout_collapseMode="pin"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                    android:id="@+id/toolbar"
+                    android:layout_alignParentTop="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/color_primary">
+                    <TextView
+                        android:id="@+id/toolbarTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="20dp"
+                        android:text="Airhero Watch Face"/>
+
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_height="match_parent"
+            android:background="@color/config_activity_background">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/list_default_padding"
+                    android:paddingRight="@dimen/list_default_padding"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:background="@color/group_bg_color">
+                    <TextView
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/color_item_label_color"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="18dp"
+                        android:text="Configurations"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+                <RelativeLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/list_default_padding"
+                    android:paddingRight="@dimen/list_default_padding"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:background="@color/config_activity_background">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_centerVertical="true"
+                            android:textColor="@color/color_item_label_color"
+                            android:fontFamily="sans-serif-light"
+                            android:textSize="18dp"
+                            android:text="@string/secondary_timezone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/timezone"
+                            android:layout_centerVertical="true"
+                            android:textColor="@color/color_accent"
+                            android:fontFamily="sans-serif-light"
+                            android:textSize="14dp"
+                            android:text="San Francisco, CA"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/list_default_padding"
+                    android:paddingRight="@dimen/list_default_padding"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:background="@color/group_bg_color">
+                    <TextView
+                        android:id="@+id/named"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/color_item_label_color"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="18dp"
+                        android:text="Accent color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+                <RelativeLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/list_default_padding"
+                    android:background="?attr/selectableItemBackground">
+                    <com.marcouberti.sonicboomwatchface.CustomGradientView
+                        android:id="@+id/gradientSn"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        app:circle_radius="26dp"
+                        app:circle_border_width="0dp"
+                        android:layout_width="52dp"
+                        android:layout_height="53dp" />
+                    <TextView
+                        android:id="@+id/nameSn"
+                        android:layout_marginLeft="@dimen/list_default_padding"
+                        android:layout_toRightOf="@+id/gradientSn"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/color_item_label_color"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="18dp"
+                        android:text="Red"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+                <RelativeLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/list_default_padding"
+                    android:background="?attr/selectableItemBackground">
+                    <com.marcouberti.sonicboomwatchface.CustomGradientView
+                        android:id="@+id/gradientS"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        app:circle_radius="26dp"
+                        app:circle_border_width="0dp"
+                        android:layout_width="52dp"
+                        android:layout_height="53dp" />
+                    <TextView
+                        android:id="@+id/nameS"
+                        android:layout_marginLeft="@dimen/list_default_padding"
+                        android:layout_toRightOf="@+id/gradientS"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/color_item_label_color"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="18dp"
+                        android:text="Blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="18dp"
+                    android:background="@drawable/button_bg_accent">
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/color_item_label_color"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="18dp"
+                        android:layout_gravity="center"
+                        android:text="@string/rate_this_app"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</RelativeLayout>

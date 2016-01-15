@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="config_activity_background">#424242</color>
+    <color name="config_activity_header_text_color">#ffffff</color>
+    <color name="color_item_label_color">#ffffff</color>
+    <color name="color_item_circle_border_color">#424242</color>
+
+    <color name="time_date_color">#ffffff</color>
+
+    <color name="dark_gray">#1a1a1a</color>
+    <color name="complications_gray">#808080</color>
+    <color name="night_mode">#00ff7d</color>
+
+    <!--Accents-->
+    <color name="col_1">#0079ff</color>
+    <color name="col_2">#bf66ff</color>
+    <color name="col_3">#f3d700</color>
+    <color name="col_4">#ff0000</color>
+    <color name="col_5">#179b00</color>
+    <color name="col_6">#afef00</color>
+    <color name="col_7">#00ff7d</color>
+    <color name="col_8">#f30f58</color>
+    <color name="col_9">#f49a00</color>
+    <color name="col_10">#8E9FBD</color>
+</resources>

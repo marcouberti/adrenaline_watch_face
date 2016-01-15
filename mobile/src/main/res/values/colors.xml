@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="digital_background">#000000</color>
+    <color name="digital_text">#ffffff</color>
+    <color name="color_primary">#252525</color>
+    <color name="color_primary_dark">#000000</color>
+    <color name="color_accent">#607D8B</color>
+    <color name="config_activity_background">#2b2b2b</color>
+    <color name="group_bg_color">#424242</color>
+    <color name="config_activity_header_text_color">#ffffff</color>
+    <color name="color_item_label_color">#ffffff</color>
+    <color name="color_item_circle_border_color">#424242</color>
+    <color name="dark_gray">#4d4d4d</color>
+
+    <!--Accents-->
+    <color name="col_1">#0079ff</color>
+    <color name="col_2">#bf66ff</color>
+    <color name="col_3">#f3d700</color>
+    <color name="col_4">#ff0000</color>
+    <color name="col_5">#179b00</color>
+    <color name="col_6">#afef00</color>
+    <color name="col_7">#00ff7d</color>
+    <color name="col_8">#f30f58</color>
+    <color name="col_9">#f49a00</color>
+    <color name="col_10">#8E9FBD</color>
+</resources>

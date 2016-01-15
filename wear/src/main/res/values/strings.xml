@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Sonic Boom</string>
+    <string name="wear_config_name">Choose a color</string>
+    <string name="background_gradients">Color</string>
+    <string name="col_1">Blue</string>
+    <string name="col_2">Violet</string>
+    <string name="col_3">Yellow</string>
+    <string name="col_4">Red</string>
+    <string name="col_5">Dark green</string>
+    <string name="col_6">Green</string>
+    <string name="col_7">Aqua</string>
+    <string name="col_8">Fruit</string>
+    <string name="col_9">Orange</string>
+    <string name="col_10">Silver</string>
+
+    <string-array name="gradients_face_array">
+        <item>@string/col_4</item>
+        <item>@string/col_7</item>
+        <item>@string/col_9</item>
+        <item>@string/col_1</item>
+        <item>@string/col_2</item>
+        <item>@string/col_3</item>
+        <item>@string/col_5</item>
+        <item>@string/col_6</item>
+        <item>@string/col_8</item>
+        <item>@string/col_10</item>
+    </string-array>
+</resources>
