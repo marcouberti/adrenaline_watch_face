@@ -27,6 +27,7 @@ import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
 public final class WatchFaceUtil {
@@ -168,7 +169,9 @@ public final class WatchFaceUtil {
         PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(PATH_WITH_FEATURE);
         DataMap configToPut = putDataMapRequest.getDataMap();
         configToPut.putAll(newConfig);
-        Wearable.DataApi.putDataItem(googleApiClient, putDataMapRequest.asPutDataRequest())
+        PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
+        putDataRequest.setUrgent();
+        Wearable.DataApi.putDataItem(googleApiClient, putDataRequest)
                 .setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
                     @Override
                     public void onResult(DataApi.DataItemResult dataItemResult) {
