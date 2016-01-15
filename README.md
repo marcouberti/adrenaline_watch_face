@@ -1,5 +1,5 @@
-# F35 Watch Face
+# Sonic Boom Watch Face
 
 Interactive Android Wear watch face.
-- Chrono/Analog watch face.
+- Analog watch face.
 - Multiple complications.
