@@ -158,9 +158,9 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             super.onApplyWindowInsets(insets);
             mIsRound = insets.isRound();
             if(mIsRound) {
-                float smallSize = ScreenUtils.getScreenWidth(getApplicationContext())/30f;
-                float normalSize = ScreenUtils.getScreenWidth(getApplicationContext())/20f;
-                float mediumSize = ScreenUtils.getScreenWidth(getApplicationContext())/18f;
+                float smallSize = ScreenUtils.getScreenWidth(getApplicationContext())/35f;
+                float normalSize = ScreenUtils.getScreenWidth(getApplicationContext())/25f;
+                float mediumSize = ScreenUtils.getScreenWidth(getApplicationContext())/19f;
                 float largeSize = ScreenUtils.getScreenWidth(getApplicationContext())/15f;
                 //set round bg images
                 smallTextPaint.setTextSize(smallSize);
@@ -170,9 +170,9 @@ public class SonicBoomFace extends CanvasWatchFaceService {
                 chronoPaint.setTextSize(normalSize);
                 logoTextPaint.setTextSize(normalSize);
             }else{
-                float smallSize = ScreenUtils.getScreenWidth(getApplicationContext())/30f;
-                float normalSize = ScreenUtils.getScreenWidth(getApplicationContext())/20f;
-                float mediumSize = ScreenUtils.getScreenWidth(getApplicationContext())/18f;
+                float smallSize = ScreenUtils.getScreenWidth(getApplicationContext())/35f;
+                float normalSize = ScreenUtils.getScreenWidth(getApplicationContext())/25f;
+                float mediumSize = ScreenUtils.getScreenWidth(getApplicationContext())/19f;
                 float largeSize = ScreenUtils.getScreenWidth(getApplicationContext())/15f;
                 //set round bg images
                 smallTextPaint.setTextSize(smallSize);
@@ -213,8 +213,8 @@ public class SonicBoomFace extends CanvasWatchFaceService {
                     .setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
                     .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
                     .setStatusBarGravity(Gravity.CENTER_VERTICAL)
-                    .setShowSystemUiTime(false).
-                            setViewProtectionMode(WatchFaceStyle.PROTECT_STATUS_BAR)
+                    .setShowSystemUiTime(false)
+                            //setViewProtectionMode(WatchFaceStyle.PROTECT_STATUS_BAR)
                     .build());
 
             //bg = BitmapFactory.decodeResource(getResources(), R.drawable.background);
@@ -1059,11 +1059,11 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             int DELTA_X = (int)(CR*1.5f);
             int DELTA_Y = (int)(CR*1.5f);
 
-            float LX = W*0.3530f;
-            float LY = H*0.6220f;
+            float LX = W*0.315f;
+            float LY = H*0.37f;
 
-            float RX = W*0.6420f;
-            float RY = H*0.6220f;
+            float RX = W*0.318f;
+            float RY = H*0.635f;
             //LEFT CENTER
             /*
             if(x <(W/4 + DELTA_X) && x >(W/4 - DELTA_X)) {
