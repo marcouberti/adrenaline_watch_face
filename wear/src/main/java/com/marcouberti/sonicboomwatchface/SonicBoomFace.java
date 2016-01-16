@@ -75,12 +75,15 @@ public class SonicBoomFace extends CanvasWatchFaceService {
      * second hand.
      */
     private static long INTERACTIVE_UPDATE_RATE_MS = 1000;
+    private static final long INTERACTIVE_UPDATE_RATE_MS_NORMAL = 1000;
+    private static final long INTERACTIVE_UPDATE_RATE_MS_STOPWATCH = 10;
 
     /**
      * Handler message id for updating the time periodically in interactive mode.
      */
     private static final int MSG_UPDATE_TIME = 0;
 
+    private static final int CHRONO = 0;
     private static final int WEEK_DAYS_BATTERY = 1;
     private static final int COORDINATES = 2;
     private static final int MONTH_AND_DAY = 3;
@@ -100,6 +103,8 @@ public class SonicBoomFace extends CanvasWatchFaceService {
     int selectedColorCode;
     String lastKnowCoordinates = "0.00 / 0.00";
     String secondTimezoneId;
+
+    private StopWatch stopWatch = new StopWatch();
 
     @Override
     public Engine onCreateEngine() {
@@ -153,10 +158,10 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             super.onApplyWindowInsets(insets);
             mIsRound = insets.isRound();
             if(mIsRound) {
-                float smallSize = ScreenUtils.getScreenWidth(getApplicationContext())/28f;
-                float normalSize = ScreenUtils.getScreenWidth(getApplicationContext())/17f;
-                float mediumSize = ScreenUtils.getScreenWidth(getApplicationContext())/15f;
-                float largeSize = ScreenUtils.getScreenWidth(getApplicationContext())/12f;
+                float smallSize = ScreenUtils.getScreenWidth(getApplicationContext())/30f;
+                float normalSize = ScreenUtils.getScreenWidth(getApplicationContext())/20f;
+                float mediumSize = ScreenUtils.getScreenWidth(getApplicationContext())/18f;
+                float largeSize = ScreenUtils.getScreenWidth(getApplicationContext())/15f;
                 //set round bg images
                 smallTextPaint.setTextSize(smallSize);
                 normalTextPaint.setTextSize(normalSize);
@@ -165,10 +170,10 @@ public class SonicBoomFace extends CanvasWatchFaceService {
                 chronoPaint.setTextSize(normalSize);
                 logoTextPaint.setTextSize(normalSize);
             }else{
-                float smallSize = ScreenUtils.getScreenWidth(getApplicationContext())/28f;
-                float normalSize = ScreenUtils.getScreenWidth(getApplicationContext())/17f;
-                float mediumSize = ScreenUtils.getScreenWidth(getApplicationContext())/15f;
-                float largeSize = ScreenUtils.getScreenWidth(getApplicationContext())/12f;
+                float smallSize = ScreenUtils.getScreenWidth(getApplicationContext())/30f;
+                float normalSize = ScreenUtils.getScreenWidth(getApplicationContext())/20f;
+                float mediumSize = ScreenUtils.getScreenWidth(getApplicationContext())/18f;
+                float largeSize = ScreenUtils.getScreenWidth(getApplicationContext())/15f;
                 //set round bg images
                 smallTextPaint.setTextSize(smallSize);
                 normalTextPaint.setTextSize(normalSize);
@@ -266,13 +271,13 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             complicationArcAccentPaint= new Paint();
             complicationArcAccentPaint.setStyle(Paint.Style.STROKE);
             complicationArcAccentPaint.setStrokeCap(Paint.Cap.BUTT);
-            complicationArcAccentPaint.setStrokeWidth(ScreenUtils.getScreenWidth(getApplicationContext()) / 50);
+            complicationArcAccentPaint.setStrokeWidth(ScreenUtils.getScreenWidth(getApplicationContext()) / 60);
             complicationArcAccentPaint.setAntiAlias(true);
 
             complicationArcBatteryPaint= new Paint();
             complicationArcBatteryPaint.setStyle(Paint.Style.STROKE);
             complicationArcBatteryPaint.setStrokeCap(Paint.Cap.BUTT);
-            complicationArcBatteryPaint.setStrokeWidth(ScreenUtils.getScreenWidth(getApplicationContext()) / 20);
+            complicationArcBatteryPaint.setStrokeWidth(ScreenUtils.getScreenWidth(getApplicationContext()) / 30);
             complicationArcBatteryPaint.setAntiAlias(true);
 
             logoTextPaint= new Paint();
@@ -349,13 +354,22 @@ public class SonicBoomFace extends CanvasWatchFaceService {
 
             int width = bounds.width();
             int height = bounds.height();
-            CR = width/8f;
+            CR = width/10f;
             /*
              * These calculations reflect the rotation in degrees per unit of time, e.g.,
              * 360 / 60 = 6 and 360 / 12 = 30.
              */
             float seconds =
                     (mCalendar.get(Calendar.SECOND) + mCalendar.get(Calendar.MILLISECOND) / 1000f);
+
+            //if chrono change seconds value
+            if(LEFT_COMPLICATION_MODE == CHRONO || RIGHT_COMPLICATION_MODE == CHRONO) {
+                if (stopWatch.running) {
+                    seconds = (float)stopWatch.getElapsedTimeSecs()+ (float)stopWatch.getElapsedTimeMillis() / 1000f;
+                }else if(stopWatch.paused){
+                    seconds = lastStopWatchSecondsValue+lastMillisValue/1000f;
+                }else seconds = 0;
+            }
 
             final float secondsRotation = seconds * 6f;
 
@@ -372,9 +386,9 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             //COMPLICATIONS
             if(!mAmbient) {
                 //left bottom
-                //drawLeftComplication(canvas, width, height);
+                drawLeftComplication(canvas, width, height);
                 //right bottom
-                //drawRightComplication(canvas, width, height);
+                drawRightComplication(canvas, width, height);
             }
             //END COMPLICATIONS
 
@@ -397,9 +411,6 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             canvas.restore();
             //END Minutes hands
 
-            //Center circle
-            canvas.drawCircle(width / 2, height / 2, ScreenUtils.convertDpToPixels(getApplicationContext(), 6), mDarkSecondsCirclePaint);
-
             //Seconds hand
             if(!mAmbient) {
                 canvas.save();
@@ -409,25 +420,26 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             }
             //END seconds hand
 
-            //Red center circle
-            if(!mAmbient && NIGHT_MODE == NIGHT_MODE_OFF) {
-                canvas.drawCircle(width / 2, height / 2, ScreenUtils.convertDpToPixels(getApplicationContext(), 3.5f), blackFillPaint);
-            }else if(!mAmbient && NIGHT_MODE == NIGHT_MODE_ON) {
-                canvas.drawCircle(width / 2, height / 2, ScreenUtils.convertDpToPixels(getApplicationContext(), 3.5f), blackFillPaint);
-            }
-            else if(mAmbient && NIGHT_MODE == NIGHT_MODE_OFF){
-                canvas.drawCircle(width / 2, height / 2, ScreenUtils.convertDpToPixels(getApplicationContext(), 3.5f), blackFillPaint);
-            }else if(mAmbient && NIGHT_MODE == NIGHT_MODE_ON){
-                canvas.drawCircle(width / 2, height / 2, ScreenUtils.convertDpToPixels(getApplicationContext(), 3.5f), blackFillPaint);
-            }
+            //Center circle
+            canvas.drawCircle(width / 2, height / 2, ScreenUtils.convertDpToPixels(getApplicationContext(), 6), blackFillPaint);
+
+            //Small center circle
+            canvas.drawCircle(width / 2, height / 2, ScreenUtils.convertDpToPixels(getApplicationContext(), 2f), darkGrayFillPaint);
 
         }
 
         private void drawLeftComplication(Canvas canvas, int width, int height) {
-            float LX = width*0.3530f;
-            float LY = height*0.6220f;
+            float LX = width*0.315f;
+            float LY = height*0.37f;
 
-            if(LEFT_COMPLICATION_MODE == MOON) {
+            if(LEFT_COMPLICATION_MODE == CHRONO
+                    || RIGHT_COMPLICATION_MODE == CHRONO) {
+                String text = "START";
+                if (stopWatch.running) text = "PAUSE";
+                else if (stopWatch.paused) text = "RESUME";
+                drawStopWatch(canvas, text, width, height, LX, LY);
+            }
+            else if(LEFT_COMPLICATION_MODE == MOON) {
                 drawMoonPhase(canvas, width, height, LX, LY);
             }else if(LEFT_COMPLICATION_MODE == WEEK_DAYS_BATTERY) {
                 drawWeekDays(canvas, width, height, LX, LY);
@@ -445,10 +457,15 @@ public class SonicBoomFace extends CanvasWatchFaceService {
         }
 
         private void drawRightComplication(Canvas canvas, int width, int height) {
-            float RX = height*0.6420f;
-            float RY = height*0.6220f;
+            float RX = height*0.318f;
+            float RY = height*0.635f;
 
-            if(RIGHT_COMPLICATION_MODE == MOON) {
+            if(LEFT_COMPLICATION_MODE == CHRONO
+                    || RIGHT_COMPLICATION_MODE == CHRONO) {
+                String text = "STOP";
+                drawStopWatch(canvas, text, width, height, RX, RY);
+            }
+            else if(RIGHT_COMPLICATION_MODE == MOON) {
                 drawMoonPhase(canvas, width, height, RX, RY);
             }else if(RIGHT_COMPLICATION_MODE == WEEK_DAYS_BATTERY) {
                 drawWeekDays(canvas, width, height, RX, RY);
@@ -1093,6 +1110,15 @@ public class SonicBoomFace extends CanvasWatchFaceService {
         }
 
         private void handleTouchOther() {
+
+            if(RIGHT_COMPLICATION_MODE == CHRONO || LEFT_COMPLICATION_MODE == CHRONO) {
+                stopWatch.stop();
+                INTERACTIVE_UPDATE_RATE_MS = INTERACTIVE_UPDATE_RATE_MS_NORMAL;
+                LEFT_COMPLICATION_MODE =MOON;
+                updateTimer();
+                return;
+            }
+
             if(NIGHT_MODE == NIGHT_MODE_ON) {
                 NIGHT_MODE = NIGHT_MODE_OFF;
 
@@ -1225,7 +1251,13 @@ public class SonicBoomFace extends CanvasWatchFaceService {
         }
 
         private void handleTouchRightBottom() {
-            if(RIGHT_COMPLICATION_MODE == MOON) RIGHT_COMPLICATION_MODE =WEEK_DAYS_BATTERY;
+            if(RIGHT_COMPLICATION_MODE == CHRONO || LEFT_COMPLICATION_MODE == CHRONO) {
+                stopWatch.stop();
+                //INTERACTIVE_UPDATE_RATE_MS = INTERACTIVE_UPDATE_RATE_MS_NORMAL;
+                //LEFT_COMPLICATION_MODE =MOON;
+                updateTimer();
+            }
+            else if(RIGHT_COMPLICATION_MODE == MOON) RIGHT_COMPLICATION_MODE =WEEK_DAYS_BATTERY;
             else if(RIGHT_COMPLICATION_MODE == WEEK_DAYS_BATTERY) RIGHT_COMPLICATION_MODE =COORDINATES;
             else if(RIGHT_COMPLICATION_MODE == COORDINATES) RIGHT_COMPLICATION_MODE =MONTH_AND_DAY;
             else if(RIGHT_COMPLICATION_MODE == MONTH_AND_DAY) RIGHT_COMPLICATION_MODE =MONTH_AND_YEAR;
@@ -1241,7 +1273,37 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             else if(LEFT_COMPLICATION_MODE == MONTH_AND_DAY) LEFT_COMPLICATION_MODE =MONTH_AND_YEAR;
             else if(LEFT_COMPLICATION_MODE == MONTH_AND_YEAR) LEFT_COMPLICATION_MODE =WEAR_BATTERY;
             else if(LEFT_COMPLICATION_MODE == WEAR_BATTERY) LEFT_COMPLICATION_MODE =SECONDARY_TIMEZONE;
-            else if(LEFT_COMPLICATION_MODE == SECONDARY_TIMEZONE) LEFT_COMPLICATION_MODE =MOON;
+            else if(LEFT_COMPLICATION_MODE == SECONDARY_TIMEZONE) LEFT_COMPLICATION_MODE =CHRONO;
+            else if(LEFT_COMPLICATION_MODE == CHRONO) {
+
+                String chrono;
+                int millis;
+                if(stopWatch.paused) {
+                    chrono = lastStopWatchValue;
+                    millis = lastMillisValue;
+                }else {
+                    chrono = stopWatch.toString();
+                    millis = (int)stopWatch.getElapsedTimeMillis();
+                    lastStopWatchValue = chrono;
+                    lastMillisValue = millis;
+                    lastStopWatchSecondsValue = (int)stopWatch.getElapsedTimeSecs();
+                }
+
+                if(stopWatch.running) {
+                    stopWatch.pause();
+                    INTERACTIVE_UPDATE_RATE_MS = INTERACTIVE_UPDATE_RATE_MS_NORMAL;
+                    updateTimer();
+                }else if(stopWatch.paused) {
+                    stopWatch.resume();
+                    INTERACTIVE_UPDATE_RATE_MS = INTERACTIVE_UPDATE_RATE_MS_STOPWATCH;
+                    updateTimer();
+                }
+                else {
+                    stopWatch.start();
+                    INTERACTIVE_UPDATE_RATE_MS = INTERACTIVE_UPDATE_RATE_MS_STOPWATCH;
+                    updateTimer();
+                }
+            }
         }
 
     }
