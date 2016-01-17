@@ -380,6 +380,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
 
             //BACKGROUND
             if(bg == null) return;//wait unti bg is ready
+            canvas.drawColor(GradientsUtils.getGradients(getApplicationContext(), selectedColorCode));
             Rect src = new Rect(0,0, bg.getWidth(), bg.getHeight());
             canvas.drawBitmap(bg, src, bounds, whiteFillPaint);
 
@@ -390,6 +391,15 @@ public class SonicBoomFace extends CanvasWatchFaceService {
                 //right bottom
                 drawRightComplication(canvas, width, height);
             }
+            //day time
+            canvas.save();
+            canvas.rotate(144, width/2f, height/2f);
+            int previousColor = largeTextPaint.getColor();
+            String day = getDayNumber();
+            largeTextPaint.setColor(whiteFillPaint.getColor());
+            canvas.drawText(day, width/2f, height*0.19f, largeTextPaint);
+            largeTextPaint.setColor(previousColor);
+            canvas.restore();
             //END COMPLICATIONS
 
             float handRatio = 480f/64f;
