@@ -44,6 +44,7 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableStatusCodes;
+import com.marcouberti.sonicboomwatchface.utils.SharedPreferencesHelper;
 import com.marcouberti.sonicboomwatchface.utils.moonphase.MoonPhase;
 import com.marcouberti.sonicboomwatchface.utils.ScreenUtils;
 import com.marcouberti.sonicboomwatchface.utils.moonphase.StarDate;
@@ -95,6 +96,10 @@ public class SonicBoomFace extends CanvasWatchFaceService {
     private static final int NIGHT_MODE_ON = 0;
     private static final int NIGHT_MODE_OFF = 1;
     private static int NIGHT_MODE = NIGHT_MODE_OFF;
+
+    private static final String LEFT_COMPLICATION_STATE = "LEFT_COMPLICATION_STATE";
+    private static final String RIGHT_COMPLICATION_STATE = "RIGHT_COMPLICATION_STATE";
+    private static final String ACCENT_COLOR_STATE = "ACCENT_COLOR_STATE";
 
     //private int BOTTOM_COMPLICATION_MODE = BATTERY;
     private int LEFT_COMPLICATION_MODE = MOON;
@@ -310,6 +315,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             updatePaintColors();
             updateBackground();
             updateHand();
+            restoreComplicationsState();
         }
 
         @Override
@@ -1021,6 +1027,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             selectedColorCode = color;
 
             updatePaintColors();
+            saveComplicationsState();
         }
 
         @Override  // GoogleApiClient.ConnectionCallbacks
@@ -1104,6 +1111,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             if(x <(LX + DELTA_X) && x >(LX - DELTA_X)) {
                 if(y >(LY -DELTA_Y) && y <(LY +DELTA_Y)) {
                     handleTouchLeftBottom();
+                    saveComplicationsState();
                     return;
                 }
             }
@@ -1111,6 +1119,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             if(x <(RX + DELTA_X) && x >(RX- DELTA_X)) {
                 if(y >(RY -DELTA_Y) && y <(RY +DELTA_Y)) {
                     handleTouchRightBottom();
+                    saveComplicationsState();
                     return;
                 }
             }
@@ -1317,6 +1326,20 @@ public class SonicBoomFace extends CanvasWatchFaceService {
         }
 
     }
+
+
+    private void restoreComplicationsState() {
+        LEFT_COMPLICATION_MODE = SharedPreferencesHelper.get(getApplicationContext(), LEFT_COMPLICATION_STATE, MOON);
+        RIGHT_COMPLICATION_MODE = SharedPreferencesHelper.get(getApplicationContext(),RIGHT_COMPLICATION_STATE,WEEK_DAYS_BATTERY);
+        selectedColorCode = SharedPreferencesHelper.get(getApplicationContext(),ACCENT_COLOR_STATE,GradientsUtils.getGradients(getApplicationContext(), -1));
+    }
+
+    private void saveComplicationsState() {
+        SharedPreferencesHelper.save(getApplicationContext(),LEFT_COMPLICATION_STATE,LEFT_COMPLICATION_MODE);
+        SharedPreferencesHelper.save(getApplicationContext(),RIGHT_COMPLICATION_STATE,RIGHT_COMPLICATION_MODE);
+        SharedPreferencesHelper.save(getApplicationContext(),ACCENT_COLOR_STATE,selectedColorCode);
+    }
+
 
     private static class EngineHandler extends Handler {
         private final WeakReference<SonicBoomFace.Engine> mWeakReference;
