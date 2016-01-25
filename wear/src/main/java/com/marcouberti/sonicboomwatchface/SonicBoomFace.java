@@ -398,13 +398,14 @@ public class SonicBoomFace extends CanvasWatchFaceService {
                 //right bottom
                 drawRightComplication(canvas, width, height);
             }
-            //day time
+
+            //day number in small circle
             canvas.save();
-            canvas.rotate(144, width/2f, height/2f);
+            canvas.rotate(58, width/2f, height/2f);
             int previousColor = largeTextPaint.getColor();
             String day = getDayNumber();
             largeTextPaint.setColor(whiteFillPaint.getColor());
-            canvas.drawText(day, width/2f, height*0.19f, largeTextPaint);
+            canvas.drawText(day, width*0.8325f, height/2f, largeTextPaint);
             largeTextPaint.setColor(previousColor);
             canvas.restore();
             //END COMPLICATIONS
