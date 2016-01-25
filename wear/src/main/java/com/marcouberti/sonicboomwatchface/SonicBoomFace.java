@@ -387,7 +387,8 @@ public class SonicBoomFace extends CanvasWatchFaceService {
 
             //BACKGROUND
             if(bg == null) return;//wait unti bg is ready
-            canvas.drawColor(GradientsUtils.getGradients(getApplicationContext(), selectedColorCode));
+            canvas.drawColor(Color.BLACK);
+            canvas.drawCircle(width / 2f, height / 2f, width * 0.48f, accentFillPaint);
             Rect src = new Rect(0,0, bg.getWidth(), bg.getHeight());
             canvas.drawBitmap(bg, src, bounds, whiteFillPaint);
 
@@ -408,6 +409,9 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             canvas.drawText(day, width*0.8325f, height/2f, largeTextPaint);
             largeTextPaint.setColor(previousColor);
             canvas.restore();
+
+            //latitude and longitude big complication
+            if(!mAmbient) drawGlobeLatitudeLongitude(canvas,width,height);
             //END COMPLICATIONS
 
             float handRatio = 480f/64f;
@@ -563,7 +567,40 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             normalTextPaint.setColor(previousColor);
         }
 
+
         long lastLocationTs = -1;
+        private void drawGlobeLatitudeLongitude(Canvas canvas, int width, int height) {
+            long now = System.currentTimeMillis();
+            //phone message only every 5min at least
+            if(lastLocationTs == -1 || now - lastLocationTs > 60000*5) {
+                fireMessage(LAST_KNOW_GPS_POSITION);
+            }
+
+            String coord = lastKnowCoordinates;
+            String[] parts = coord.split("/");
+            float lat = Float.parseFloat(parts[0].replace(",", ".").trim());
+            float lon = Float.parseFloat(parts[1].replace(",",".").trim());
+
+            float GCX = width*0.725f;
+            float GCY = height/2f;
+            float G_RIGHT = GCX + width / 11.5f;
+
+            float radius = width/150f;
+            if(radius < 2) radius = 2;
+
+            //draw lat
+            canvas.save();
+            canvas.rotate(-lat, GCX, GCY);
+            canvas.drawCircle(GCX + width / 11.5f, GCY, radius,accentFillPaint);
+            canvas.restore();
+
+            //draw lon
+            float absLon = Math.abs(lon);
+            float G_LON = GCX + ((G_RIGHT-GCX)*absLon)/180;
+            if(lon < 0) G_LON = GCX - ((G_RIGHT-GCX)*absLon)/180;
+            canvas.drawCircle(G_LON, GCY, radius,accentFillPaint);
+        }
+
         private void drawCoordinates(Canvas canvas, int width, int height,  float CX, float CY) {
             long now = System.currentTimeMillis();
             //phone message only every 5min at least
