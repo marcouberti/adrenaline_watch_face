@@ -127,7 +127,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
         Paint blackFillPaint, whiteFillPaint, darkGrayFillPaint;
         Paint accentFillPaint, chronoPaint, secondTimezoneStrokePaint;
         Paint complicationArcAccentPaint,complicationArcBatteryPaint;
-        Paint largeTextPaint, mediumTextPaint, normalTextPaint;
+        Paint largeTextPaint, mediumTextPaint, normalTextPaint,dayNumberPaint;
         boolean mAmbient;
         Calendar mCalendar;
         Time mTime;
@@ -175,6 +175,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
                 largeTextPaint.setTextSize(largeSize);
                 chronoPaint.setTextSize(normalSize);
                 logoTextPaint.setTextSize(normalSize);
+                dayNumberPaint.setTextSize(mediumSize);
             }else{
                 float smallSize = ScreenUtils.getScreenWidth(getApplicationContext())/35f;
                 float normalSize = ScreenUtils.getScreenWidth(getApplicationContext())/25f;
@@ -187,6 +188,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
                 largeTextPaint.setTextSize(largeSize);
                 chronoPaint.setTextSize(normalSize);
                 logoTextPaint.setTextSize(normalSize);
+                dayNumberPaint.setTextSize(mediumSize);
             }
         }
 
@@ -257,6 +259,11 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             normalTextPaint.setAntiAlias(true);
             normalTextPaint.setTextAlign(Paint.Align.CENTER);
             normalTextPaint.setTypeface(Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Dolce Vita.ttf"));
+
+            dayNumberPaint = new Paint();
+            dayNumberPaint.setAntiAlias(true);
+            dayNumberPaint.setTextAlign(Paint.Align.CENTER);
+            dayNumberPaint.setTypeface(Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Dolce Vita Heavy Bold.ttf"));
 
             accentFillPaint= new Paint();
             accentFillPaint.setAntiAlias(true);
@@ -402,12 +409,9 @@ public class SonicBoomFace extends CanvasWatchFaceService {
 
             //day number in small circle
             canvas.save();
-            canvas.rotate(58, width/2f, height/2f);
-            int previousColor = largeTextPaint.getColor();
+            canvas.rotate(57, width/2f, height/2f);
             String day = getDayNumber();
-            largeTextPaint.setColor(whiteFillPaint.getColor());
-            canvas.drawText(day, width*0.8325f, height/2f, largeTextPaint);
-            largeTextPaint.setColor(previousColor);
+            canvas.drawText(day, width * 0.8325f, height / 2f, dayNumberPaint);
             canvas.restore();
 
             //latitude and longitude big complication
@@ -1272,6 +1276,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
                 complicationArcAccentPaint.setColor(GradientsUtils.getGradients(getApplicationContext(), selectedColorCode));
                 complicationArcBatteryPaint.setColor(GradientsUtils.getGradients(getApplicationContext(), selectedColorCode));
                 //white and gray colors
+                dayNumberPaint.setColor(getResources().getColor(R.color.complications_gray));
                 normalTextPaint.setColor(getResources().getColor(R.color.complications_gray));
                 smallTextPaint.setColor(getResources().getColor(R.color.complications_gray));
                 mediumTextPaint.setColor(getResources().getColor(R.color.complications_gray));
@@ -1290,6 +1295,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
                 complicationArcAccentPaint.setColor(Color.DKGRAY);
                 complicationArcBatteryPaint.setColor(Color.DKGRAY);
                 //white and gray colors
+                dayNumberPaint.setColor(nightColor);
                 normalTextPaint.setColor(nightColor);
                 smallTextPaint.setColor(nightColor);
                 mediumTextPaint.setColor(nightColor);
