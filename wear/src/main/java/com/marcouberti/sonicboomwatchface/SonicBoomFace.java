@@ -100,6 +100,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
     private static final String LEFT_COMPLICATION_STATE = "LEFT_COMPLICATION_STATE";
     private static final String RIGHT_COMPLICATION_STATE = "RIGHT_COMPLICATION_STATE";
     private static final String ACCENT_COLOR_STATE = "ACCENT_COLOR_STATE";
+    private static final String SECOND_TIMEZONE_STATE = "SECOND_TIMEZONE_STATE";
 
     //private int BOTTOM_COMPLICATION_MODE = BATTERY;
     private int LEFT_COMPLICATION_MODE = MOON;
@@ -1015,6 +1016,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
         private boolean updateUiForKey(String configKey, String value) {
             if (configKey.equals(WatchFaceUtil.KEY_SECOND_TIMEZONE)) {
                 secondTimezoneId = value;
+                saveComplicationsState();
             } else {
                 Log.w(TAG, "Ignoring unknown config key: " + configKey);
                 return false;
@@ -1329,15 +1331,19 @@ public class SonicBoomFace extends CanvasWatchFaceService {
 
 
     private void restoreComplicationsState() {
-        LEFT_COMPLICATION_MODE = SharedPreferencesHelper.get(getApplicationContext(), LEFT_COMPLICATION_STATE, MOON);
+        LEFT_COMPLICATION_MODE = SharedPreferencesHelper.get(getApplicationContext(),LEFT_COMPLICATION_STATE,MOON);
         RIGHT_COMPLICATION_MODE = SharedPreferencesHelper.get(getApplicationContext(),RIGHT_COMPLICATION_STATE,WEEK_DAYS_BATTERY);
         selectedColorCode = SharedPreferencesHelper.get(getApplicationContext(),ACCENT_COLOR_STATE,GradientsUtils.getGradients(getApplicationContext(), -1));
+        secondTimezoneId = SharedPreferencesHelper.get(getApplicationContext(),SECOND_TIMEZONE_STATE,null);
     }
 
     private void saveComplicationsState() {
         SharedPreferencesHelper.save(getApplicationContext(),LEFT_COMPLICATION_STATE,LEFT_COMPLICATION_MODE);
         SharedPreferencesHelper.save(getApplicationContext(),RIGHT_COMPLICATION_STATE,RIGHT_COMPLICATION_MODE);
         SharedPreferencesHelper.save(getApplicationContext(),ACCENT_COLOR_STATE,selectedColorCode);
+        if(secondTimezoneId != null) {
+            SharedPreferencesHelper.save(getApplicationContext(), SECOND_TIMEZONE_STATE, secondTimezoneId);
+        }
     }
 
 
