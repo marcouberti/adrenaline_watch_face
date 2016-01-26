@@ -353,6 +353,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
                     //mHandPaint.setAntiAlias(!inAmbientMode);
                 }
                 updateBackground();
+                updateHand();
                 invalidate();
             }
 
@@ -408,11 +409,13 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             }
 
             //day number in small circle
-            canvas.save();
-            canvas.rotate(57, width/2f, height/2f);
-            String day = getDayNumber();
-            canvas.drawText(day, width * 0.8325f, height / 2f, dayNumberPaint);
-            canvas.restore();
+            if(!mAmbient) {
+                canvas.save();
+                canvas.rotate(57, width / 2f, height / 2f);
+                String day = getDayNumber();
+                canvas.drawText(day, width * 0.8325f, height / 2f, dayNumberPaint);
+                canvas.restore();
+            }
 
             //latitude and longitude big complication
             if(!mAmbient) drawGlobeLatitudeLongitude(canvas,width,height);
@@ -447,11 +450,16 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             //END seconds hand
 
             //Center circle
-            canvas.drawCircle(width / 2, height / 2, ScreenUtils.convertDpToPixels(getApplicationContext(), 6), blackFillPaint);
+            if(!mAmbient) {
+                canvas.drawCircle(width / 2, height / 2, ScreenUtils.convertDpToPixels(getApplicationContext(), 6), blackFillPaint);
+            }
 
             //Small center circle
-            canvas.drawCircle(width / 2, height / 2, ScreenUtils.convertDpToPixels(getApplicationContext(), 2f), darkGrayFillPaint);
-
+            if(!mAmbient) {
+                canvas.drawCircle(width / 2, height / 2, ScreenUtils.convertDpToPixels(getApplicationContext(), 2f), darkGrayFillPaint);
+            }else {
+                canvas.drawCircle(width / 2, height / 2, ScreenUtils.convertDpToPixels(getApplicationContext(), 4f), blackFillPaint);
+            }
         }
 
         private void drawLeftComplication(Canvas canvas, int width, int height) {
@@ -845,6 +853,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             // whether we're in ambient mode), so we may need to start or stop the timer.
             updateTimer();
             updateBackground();
+            updateHand();
         }
 
         private void setupF35Wearable() {
@@ -1189,6 +1198,7 @@ public class SonicBoomFace extends CanvasWatchFaceService {
                 NIGHT_MODE = NIGHT_MODE_ON;
             }
             updateBackground();
+            updateHand();
         }
 
         private void updateHand() {
@@ -1196,9 +1206,26 @@ public class SonicBoomFace extends CanvasWatchFaceService {
             if(minutesBg!=null && !minutesBg.isRecycled()) minutesBg.recycle();
             if(secondsBg!=null && !secondsBg.isRecycled()) secondsBg.recycle();
 
-            hoursBg = BitmapFactory.decodeResource(getResources(), R.drawable.hours);
-            minutesBg = BitmapFactory.decodeResource(getResources(), R.drawable.minutes);
-            secondsBg = BitmapFactory.decodeResource(getResources(), R.drawable.seconds);
+            if (!mAmbient) {
+                if (NIGHT_MODE == NIGHT_MODE_ON) {
+                    hoursBg = BitmapFactory.decodeResource(getResources(), R.drawable.hours_night);
+                    minutesBg = BitmapFactory.decodeResource(getResources(), R.drawable.minutes_night);
+                    secondsBg = BitmapFactory.decodeResource(getResources(), R.drawable.seconds_night);
+                }else {
+                    hoursBg = BitmapFactory.decodeResource(getResources(), R.drawable.hours);
+                    minutesBg = BitmapFactory.decodeResource(getResources(), R.drawable.minutes);
+                    secondsBg = BitmapFactory.decodeResource(getResources(), R.drawable.seconds);
+                }
+            }else {
+                if (NIGHT_MODE == NIGHT_MODE_ON) {
+                    hoursBg = BitmapFactory.decodeResource(getResources(), R.drawable.hours_ambient_night);
+                    minutesBg = BitmapFactory.decodeResource(getResources(), R.drawable.minutes_ambient_night);
+                }
+                else {
+                    hoursBg = BitmapFactory.decodeResource(getResources(), R.drawable.hours_ambient);
+                    minutesBg = BitmapFactory.decodeResource(getResources(), R.drawable.minutes_ambient);
+                }
+            }
         }
 
         private void updateBackground() {
