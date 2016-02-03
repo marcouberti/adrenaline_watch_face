@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Sonic Boom</string>
-    <string name="config_activity_title">Sonic Boom Watch Face</string>
+    <string name="app_name">Adrenaline</string>
+    <string name="config_activity_title">Adrenaline Watch Face</string>
 
     <string name="title_no_device_connected">No wearable device is currently connected.</string>
     <string name="ok_no_device_connected">OK</string>
