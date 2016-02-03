@@ -1,4 +1,4 @@
-# Sonic Boom Watch Face
+# Adrenaline Watch Face
 
 Interactive Android Wear watch face.
 - Analog watch face.
